@@ -5,6 +5,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -23,7 +24,12 @@ public class Controller implements Initializable
     private TextField lastNameTextField;
     @FXML
     private CheckBox isActiveCheckBox;
-
+    @FXML
+    Button clearButton;
+    @FXML
+    Button addButton;
+    @FXML
+    Button removeButton;
 
 
 
@@ -41,37 +47,35 @@ public class Controller implements Initializable
                 }
                 );
 
-
         ObservableList<Employee> items = employeeListView.getItems();
-        Employee employee1 = new Employee();
-        Employee employee2 = new Employee();
-        employee1.firstName = "Robert";
-        employee1.lastName = "Smith";
-        employee2.firstName = "Lisa";
-        employee2.lastName = "Smith";
-
-        items.add(employee1);
-        items.add(employee2);
-
         for(int i = 0; i < 10; i++)
         {
             Employee employee = new Employee();
             employee.firstName = "Generic";
-            employee.lastName = "Employee" + " " + i;
+            employee.lastName = "Employee " + i;
             employee.hire();
             items.add(employee);
         }
 
-        Staff staff1 = new Staff();
-        staff1.firstName = "StaffPerson";
-        staff1.lastName = "GoodWorker";
+        clearButton.setOnAction(actionEvent-> {
+            firstNameTextField.clear();
+            lastNameTextField.clear();
+            isActiveCheckBox.setSelected(false);
+        });
 
-        Faculty faculty1 = new Faculty();
-        faculty1.firstName = "FacultyPerson";
-        faculty1.lastName = "TerribleWorker";
+        addButton.setOnAction(actionEvent-> {
+            Employee newEmp = new Employee();
+            newEmp.firstName = firstNameTextField.getText();
+            newEmp.lastName = lastNameTextField.getText();
+            newEmp.isActive = isActiveCheckBox.isSelected();
+            items.add(newEmp);
+        });
 
-        items.add(staff1);
-        items.add(faculty1);
+        removeButton.setOnAction(actionEvent->{
+           Worker selectedItem = employeeListView.getSelectionModel().getSelectedItem();
+           items.remove(selectedItem);
+        });
 
     }
+
 }
